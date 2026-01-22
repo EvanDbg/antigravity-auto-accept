@@ -1,43 +1,131 @@
+# Publishing to VS Code Marketplace
 
-# How to Publish "Antigravity Auto Accept"
+This guide explains how to package and publish the **Antigravity Auto Accept** extension.
 
-Since PowerShell script execution is restricted on your system, please follow these steps to package and publish the extension manually.
+---
 
-## 1. Open Command Prompt (CMD)
-Do not use PowerShell. Press `Win + R`, type `cmd`, and press Enter.
+## Prerequisites
+
+- Node.js installed
+- npm installed
+- A Microsoft account for the VS Code Marketplace
+
+---
+
+## 1. Install VSCE
+
+VSCE (Visual Studio Code Extensions) is the command-line tool for packaging and publishing.
+
+```bash
+npm install -g @vscode/vsce
+```
+
+---
 
 ## 2. Navigate to the Extension Folder
-Run this command:
-```cmd
-cd "C:\Users\matth\Desktop\auto_approval2\unlimited_approver"
+
+Open a terminal and navigate to the extension directory:
+
+```bash
+cd path/to/antigravity-auto-accept
 ```
+
+---
 
 ## 3. Package the Extension
-Run these commands to install the packager and create the file:
-```cmd
-npm install -g @vscode/vsce
+
+Create a `.vsix` file:
+
+```bash
 npx vsce package
 ```
-*   If asked about missing `repository` field, type `y` to continue.
-*   This will create a file named `antigravity-auto-accept-1.0.1.vsix`.
+
+If prompted about missing fields, type `y` to continue.
+
+This creates a file like `antigravity-auto-accept-1.1.0.vsix`.
+
+---
 
 ## 4. Publish to Marketplace
-You have two options:
 
-### Option A: Web Upload (Easiest)
-1.  Go to [marketplace.visualstudio.com](https://marketplace.visualstudio.com/manage).
-2.  Login with your Microsoft account.
-3.  Click **"New Extension"** -> **"Visual Studio Code"**.
-4.  Upload the `.vsix` file you just created.
+### Option A: Web Upload (Recommended for First-Time)
 
-### Option B: Command Line (Advanced)
-1.  Get a Personal Access Token (PAT) from Azure DevOps.
-2.  Run:
-    ```cmd
-    npx vsce publish -p <YOUR_TOKEN>
-    ```
+1. Go to [marketplace.visualstudio.com/manage](https://marketplace.visualstudio.com/manage)
+2. Log in with your Microsoft account
+3. Click **"New Extension"** → **"Visual Studio Code"**
+4. Upload the `.vsix` file
+5. Fill in the required metadata
+6. Click **Publish**
 
-## 5. Metadata Check
-Before publishing, you may want to edit `package.json` to add your real name/publisher ID:
-*   Change `"publisher": "gemini"` to your actual Marketplace Publisher ID.
-*   Change `"repository"` to your GitHub URL (optional).
+### Option B: Command Line
+
+1. Create a Personal Access Token (PAT) from [Azure DevOps](https://dev.azure.com)
+   - Scopes needed: `Marketplace (Manage)`
+
+2. Publish:
+   ```bash
+   npx vsce publish -p <YOUR_PAT_TOKEN>
+   ```
+
+---
+
+## 5. Pre-Publish Checklist
+
+Before publishing, verify:
+
+- [ ] `package.json` version is updated
+- [ ] `CHANGELOG.md` includes the new version
+- [ ] `publisher` field matches your Marketplace Publisher ID
+- [ ] `repository` field points to your GitHub repo
+- [ ] `icon.png` is present and valid (128x128 recommended)
+- [ ] README renders correctly
+
+---
+
+## 6. Update the Version
+
+When publishing a new version:
+
+1. Update `version` in `package.json`
+2. Add entry to `CHANGELOG.md`
+3. Package and publish
+
+```bash
+# Update version
+npm version patch  # or minor, or major
+
+# Package
+npx vsce package
+
+# Publish
+npx vsce publish -p <YOUR_PAT_TOKEN>
+```
+
+---
+
+## Troubleshooting
+
+### "Missing publisher"
+Add your publisher ID to `package.json`:
+```json
+{
+  "publisher": "your-publisher-id"
+}
+```
+
+### "Missing repository"
+Add repository info to `package.json`:
+```json
+{
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/antigravity-auto-accept"
+  }
+}
+```
+
+### PowerShell Execution Errors
+Use Command Prompt (cmd) instead of PowerShell, or set the execution policy:
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```

@@ -2,7 +2,7 @@
   "name": "antigravity-auto-accept",
   "displayName": "Antigravity Auto Accept",
   "description": "Automatically accepts Antigravity agent steps without limits.",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "icon": "icon.png",
   "publisher": "pesosz",
   "repository": {
@@ -20,10 +20,50 @@
     "Other"
   ],
   "contributes": {
+    "configuration": {
+      "title": "Antigravity Auto Accept",
+      "properties": {
+        "antigravity-auto-accept.cdpPort": {
+          "type": "number",
+          "default": 9222,
+          "description": "Chrome DevTools Protocol port for Antigravity remote debugging (--remote-debugging-port)"
+        },
+        "antigravity-auto-accept.autoRetryEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable auto-retry via CDP when agent encounters an error"
+        },
+        "antigravity-auto-accept.retryMaxCount": {
+          "type": "number",
+          "default": 10,
+          "description": "Maximum number of auto-retry attempts (0 = unlimited)"
+        }
+      }
+    },
     "commands": [
       {
         "command": "unlimited.toggle",
         "title": "Toggle Unlimited Auto-Accept"
+      },
+      {
+        "command": "unlimited.toggleRetry",
+        "title": "Toggle Unlimited Auto-Retry (CDP)"
+      },
+      {
+        "command": "unlimited.setCdpPort",
+        "title": "Set CDP Port for Auto-Retry"
+      },
+      {
+        "command": "unlimited.listCommands",
+        "title": "List Antigravity Commands (Debug)"
+      },
+      {
+        "command": "unlimited.setRetryMaxCount",
+        "title": "Set Retry Max Count"
+      },
+      {
+        "command": "unlimited.resetRetryCount",
+        "title": "Reset Retry Counter"
       }
     ],
     "keybindings": [
@@ -31,7 +71,15 @@
         "command": "unlimited.toggle",
         "key": "ctrl+alt+shift+u",
         "mac": "cmd+alt+shift+u"
+      },
+      {
+        "command": "unlimited.toggleRetry",
+        "key": "ctrl+alt+shift+r",
+        "mac": "cmd+alt+shift+r"
       }
     ]
+  },
+  "dependencies": {
+    "ws": "^8.19.0"
   }
 }
